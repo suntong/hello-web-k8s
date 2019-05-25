@@ -7,17 +7,6 @@
 # * creating a review app for each topic branch,
 # * and continuous deployment to production
 #
-# Test jobs may be disabled by setting environment variables:
-# * test: TEST_DISABLED
-# * code_quality: CODE_QUALITY_DISABLED
-# * license_management: LICENSE_MANAGEMENT_DISABLED
-# * performance: PERFORMANCE_DISABLED
-# * sast: SAST_DISABLED
-# * dependency_scanning: DEPENDENCY_SCANNING_DISABLED
-# * container_scanning: CONTAINER_SCANNING_DISABLED
-# * dast: DAST_DISABLED
-# * review: REVIEW_DISABLED
-# * stop_review: REVIEW_DISABLED
 #
 # In order to deploy, you must have a Kubernetes cluster configured either
 # via a project integration, or via group/project variables.
@@ -39,34 +28,14 @@
 # Note: Auto CI does not work with multiple buildpacks yet
 image: alpine:latest
 variables:
-  # KUBE_INGRESS_BASE_DOMAIN is the application deployment domain and should be set as a variable at the group or project level.
-  # KUBE_INGRESS_BASE_DOMAIN: domain.example.com
-  POSTGRES_USER: user
-  POSTGRES_PASSWORD: testing-password
-  POSTGRES_ENABLED: "true"
-  POSTGRES_DB: $CI_ENVIRONMENT_SLUG
-  POSTGRES_VERSION: 9.6.2
   KUBERNETES_VERSION: 1.11.9
   HELM_VERSION: 2.13.1
   DOCKER_DRIVER: overlay2
-  ROLLOUT_RESOURCE_TYPE: deployment
+
 stages:
   - build
-  - test
   - deploy # dummy stage to follow the template guidelines
-  - review
-  - dast
-  - staging
-  - canary
-  - production
-  - incremental rollout 10%
-  - incremental rollout 25%
-  - incremental rollout 50%
-  - incremental rollout 100%
-  - performance
-  - cleanup
+
 include:
   - template: Jobs/Build.gitlab-ci.yml
-  - template: Jobs/Test.gitlab-ci.yml
-  - template: Jobs/Code-Quality.gitlab-ci.yml
   - template: Jobs/Deploy.gitlab-ci.yml
