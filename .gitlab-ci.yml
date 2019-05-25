@@ -1,0 +1,2 @@
+include:
+  - template: Jobs/Auto-DevOps.gitlab-ci.yml
